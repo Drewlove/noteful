@@ -1,0 +1,46 @@
+header>h1{
+  text-align: center
+}
+
+.main{
+  display: flex;
+  justify-content: space-around
+}
+
+.active{
+  background-color: lightblue
+}
+
+.sidebar-btn{
+  text-decoration: none; 
+  color: black; 
+  display: block;
+  width: 150px;
+  text-align: justify;
+  padding: 10px 10px 10px 25px;
+  font-size: 18px;
+  margin-top: 5px;
+  border: 2px solid black
+}
+
+.notecard-container{
+  border: 2px solid black;
+  width: 250px;
+  margin-top: 5px; 
+  display: flex;
+  justify-content: space-around;
+  color: black; 
+  text-decoration: none
+}
+
+.notecard-btn{
+  height: 20px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+.notecard-content{
+  width: 250px
+}
+
+
