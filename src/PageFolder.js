@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import FolderList from './FolderList';  
 import Notecard from './Notecard'; 
-import STORE from './store'; 
+import NotefulContext from './NotefulContext'; 
+
 
 class PageFolder extends Component{
+
+    static contextType = NotefulContext; 
+
     render(){
-        const notes = STORE.notes.filter(note => {
+        console.log(this.context)
+        const notes = this.context.notes.filter(note => {
             return note.folderId === this.props.match.params.folderId
         })
         return(

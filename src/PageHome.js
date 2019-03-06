@@ -1,19 +1,21 @@
 import React, {Component} from 'react'; 
-import {Link} from 'react-router-dom';
 import Notecard from './Notecard';
 import FolderList from './FolderList';
-import STORE from './store';
+import NotefulContext from './NotefulContext'
 
 class PageHome extends Component{
+
+    static contextType = NotefulContext; 
+
     render(){
-        const notes = STORE.notes.map((note, index) =>{
+        const notes = this.context.notes.map((note, index) =>{
             return (
                 <Notecard note={note} key={index}/>
             )
         })    
         return (
             <>
-                <FolderList />
+                <FolderList/>
                 <section>
                 {notes}
                 </section>

@@ -1,16 +1,20 @@
 import React, {Component} from 'react'; 
 import {Link} from 'react-router-dom'; 
 import Notecard from './Notecard';
-import STORE from './store';
+import NotefulContext from './NotefulContext';
 
 class PageNote extends Component{
+
+    static contextType = NotefulContext; 
+
     render(){
-        const note = STORE.notes.find(note => {
+        const note = this.context.notes.find(note => {
             return note.id === this.props.match.params.noteId
         })
-        const folder = STORE.folders.find(folder => {
+        const folder = this.context.folders.find(folder => {
             return folder.id === note.folderId
         })
+
         return (
             <>
                 <div>
@@ -22,6 +26,7 @@ class PageNote extends Component{
                 <section>
                 <Notecard note={note}/>
                 <p className='notecard-content'>{note.content}</p>
+                
                 </section>
             </>
         )
