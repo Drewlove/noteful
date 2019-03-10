@@ -1,13 +1,11 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom' 
-import NotefulContext from './NotefulContext';
+import PropTypes from 'prop-types'; 
 
 class Notecard extends Component{
 
-    static contextType = NotefulContext; 
-
     handleSelectNote = (note) => {
-        this.context.selectNote(note)
+        this.props.selectNote(note)
     }
 
     handleDeleteNote = (noteId, callbackDelete) => {
@@ -40,7 +38,7 @@ class Notecard extends Component{
                 <h1>{this.props.note.name}</h1>
                 </Link>
                 <button className='notecard-delete-btn' 
-                onClick={()=>this.handleDeleteNote(this.props.note.id, this.context.deleteNote)}
+                onClick={()=>this.handleDeleteNote(this.props.note.id, this.props.deleteNote)}
                 >
                 Delete
                 </button>
@@ -48,5 +46,10 @@ class Notecard extends Component{
         )
     }
 }
+
+Notecard.propTypes = {
+    selectNote: PropTypes.func
+}
+
 
 export default Notecard

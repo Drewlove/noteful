@@ -1,29 +1,40 @@
 import React, {Component} from 'react';
 import FolderList from './FolderList';  
 import Notecard from './Notecard'; 
-import NotefulContext from './NotefulContext'; 
+import PropTypes from 'prop-types'
 
 
 class PageFolder extends Component{
 
-    static contextType = NotefulContext; 
-
     render(){
-        console.log(this.context)
-        const notes = this.context.notes.filter(note => {
+        const notes = this.props.notes.filter(note => {
             return note.folderId === this.props.match.params.folderId
         })
         return(
-            <>
-                <FolderList />
+            <div  className='main'>
+                <FolderList folders={this.props.folders}/>
                 <section>
                 {notes.map((note, index) => {
-                    return <Notecard note={note} key={index}/>
+                    return <Notecard 
+                    note={note} 
+                    key={index} 
+                    selectNote={this.props.selectNote}
+                    deleteNote={this.props.deleteNote}
+                    />
                 })}
                 </section>
-            </>
+            </div>
         )
     }
+}
+
+PageFolder.propTypes = {
+    notes: PropTypes.arrayOf(PropTypes.shape({
+        content: PropTypes.string, 
+        folderId: PropTypes.string, 
+        id: PropTypes.string,
+        name: PropTypes.string
+    }))
 }
 
 export default PageFolder

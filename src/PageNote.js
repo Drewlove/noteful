@@ -1,22 +1,21 @@
 import React, {Component} from 'react'; 
 import {Link} from 'react-router-dom'; 
 import Notecard from './Notecard';
-import NotefulContext from './NotefulContext';
+import PropTypes from 'prop-types';
 
 class PageNote extends Component{
 
-    static contextType = NotefulContext; 
-
     render(){
-        const note = this.context.notes.find(note => {
+        console.log('props', this.props)
+        const note = this.props.notes.find(note => {
             return note.id === this.props.match.params.noteId
         })
-        const folder = this.context.folders.find(folder => {
+        const folder = this.props.folders.find(folder => {
             return folder.id === note.folderId
         })
 
         return (
-            <>
+            <div  className='main'>
                 <div>
                     <Link to='/' className='sidebar-btn'>
                     Go Back
@@ -24,13 +23,26 @@ class PageNote extends Component{
                     <h1>{folder.name}</h1>
                 </div>
                 <section>
-                <Notecard note={note}/>
+                <Notecard note={note} deleteNote={this.props.deleteNote}/>
                 <p className='notecard-content'>{note.content}</p>
                 
                 </section>
-            </>
+            </div>
         )
     }
+}
+
+PageNote.propTypes = {
+    folders: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.name, 
+        name: PropTypes.id                
+    })), 
+    notes: PropTypes.arrayOf(PropTypes.shape({
+        content: PropTypes.string, 
+        folderId: PropTypes.string, 
+        name: PropTypes.string, 
+        content: PropTypes.string
+    }))
 }
 
 export default PageNote

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Route, Link} from 'react-router-dom'
-import PageHome from './PageHome'
-import PageFolder from './PageFolder'
-import PageNote from './PageNote'
-import NotefulContext from './NotefulContext';
+import {Route, Link} from 'react-router-dom';
+import PageHome from './PageHome';
+import PageFolder from './PageFolder';
+import PageNote from './PageNote';
+import AddFolder from './AddFolder'; 
+import AddNote from './AddNote'; 
 
 class App extends Component {
   state = {
@@ -31,6 +32,16 @@ class App extends Component {
     .catch(error => this.setState({error}))
   }
 
+  addFolder = (folder)=> {
+    const folders = [...this.state.folders, folder]; 
+    this.setState({folders})
+  }
+
+  addNote = (note)=> {
+    const notes = [...this.state.notes, note]; 
+    this.setState({notes})
+  }
+
   selectNote = (note) => {
     this.setState({note})
   }
@@ -42,39 +53,77 @@ class App extends Component {
     this.setState({notes})
   }
 
-
-
   render() {
-    const contextValue = {
-      folders: this.state.folders, 
-      notes: this.state.notes, 
-      note: this.state.note, 
-      selectNote: this.selectNote, 
-      deleteNote: this.deleteNote
-    }
-
     return (
         <div className="App">
           <header>
-            <Link className='header-text'to='/'>Noteful</Link>
+            <Link className='header-text' to='/'> Noteful</Link>
+            <Link to='/addFolder' className='add-btn'>Add Folder</Link>
+            <Link to='/addNote' className='add-btn'>Add Note</Link>
           </header>
-          <main className='main'>
-          <NotefulContext.Provider value={contextValue}>
+          <main>
             <Route 
             exact path='/'
-            component={PageHome}
+            render={()=> {
+              return (
+              <PageHome 
+                notes={this.state.notes}
+                folders={this.state.folders}
+                selectNote={this.selectNote}
+                deleteNote={this.deleteNote}
+              />
+              )
+            }}
             />
-
-            <Route
-            path='/folder/:folderId'
-            component={PageFolder}
-            /> 
             
-            <Route 
+            <Route
+              path='/folder/:folderId'
+              render={(routeProps) => {
+                return(
+                  <PageFolder 
+                  folders={this.state.folders}
+                  notes={this.state.notes}
+                  selectNote={this.selectNote}
+                  deleteNote={this.deleteNote}
+                  {...routeProps}
+                  />
+                )
+              }}
+              />
+              
+              <Route 
               path = '/note/:noteId'
-              component={PageNote}
-              /> 
-            </NotefulContext.Provider>
+              render={routeProps => {
+                return (
+                  <PageNote 
+                  notes = {this.state.notes}
+                  folders={this.state.folders}
+                  deleteNote={this.deleteNote}
+                 {...routeProps}
+                  />
+                )
+              }}
+              />
+
+              <Route path='/addFolder'
+              render={(routeProps)=> {
+               return <AddFolder 
+               addFolder={this.addFolder}
+               {...routeProps}
+               />
+              }}
+              />  
+
+              <Route path='/addNote'
+              render={(routeProps) => {
+                return <AddNote 
+                folders={this.state.folders}
+                addNote={this.addNote}
+                {...routeProps}
+                />
+              }}
+              
+              />
         </main> 
       </div>
     );
@@ -82,3 +131,6 @@ class App extends Component {
 }
 
 export default App;
+
+
+

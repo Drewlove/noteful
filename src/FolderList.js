@@ -1,13 +1,11 @@
 import React, {Component} from 'react'; 
 import {NavLink} from 'react-router-dom';
-import NotefulContext from './NotefulContext'; 
+import PropTypes from 'prop-types'; 
 
 class FolderList extends Component{
 
-    static contextType = NotefulContext; 
-
     render(){
-        const folders = this.context.folders.map((folder, index) => {
+        const folders = this.props.folders.map((folder, index) => {
             return (
                 <NavLink 
                 to={`/folder/${folder.id}`} 
@@ -23,6 +21,14 @@ class FolderList extends Component{
             <div>{folders}</div>
         )
     }
+}
+
+FolderList.propTypes = {
+    folders: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired, 
+        name: PropTypes.string.isRequired
+    })) 
+
 }
 
 export default FolderList
