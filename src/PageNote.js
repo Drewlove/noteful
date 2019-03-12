@@ -41,7 +41,6 @@ PageNote.propTypes = {
         content: PropTypes.string, 
         folderId: PropTypes.string, 
         name: PropTypes.string, 
-        content: PropTypes.string
     }))
 }
 
