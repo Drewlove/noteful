@@ -1,6 +1,7 @@
 import React, {Component} from 'react'; 
 import FormError from './FormError';
 import ErrorBoundary from './ErrorBoundary'; 
+import PropTypes from 'prop-types';
 
 class AddFolder extends Component{
     constructor(props){

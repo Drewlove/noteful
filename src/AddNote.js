@@ -1,5 +1,6 @@
 import React, {Component} from 'react'; 
 import FormError from './FormError'; 
+import PropTypes from 'prop-types';
 
 class AddNote extends Component{
     constructor(props){
@@ -45,6 +46,11 @@ class AddNote extends Component{
         })
         .then(this.props.addNote)
         .then(this.props.history.push('/'))
+    }
+
+    componentDidMount(){
+        const defaultFolderId = this.props.folders[0].id; 
+        this.setState({folderId:defaultFolderId})
     }
 
     updateName(name){
