@@ -84,4 +84,12 @@ class AddNote extends Component{
     }
 }
 
+AddNote.propTypes = {
+    folders: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired, 
+        name: PropTypes.string.isRequired
+    })), 
+    addNote: PropTypes.func
+}
+
     export default AddNote

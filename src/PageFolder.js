@@ -34,7 +34,12 @@ PageFolder.propTypes = {
         folderId: PropTypes.string, 
         id: PropTypes.string,
         name: PropTypes.string
-    }))
+    })), 
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            folderId: PropTypes.string
+        })
+    })
 }
 
 export default PageFolder

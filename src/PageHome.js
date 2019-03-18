@@ -32,6 +32,10 @@ PageHome.propTypes = {
         folderId: PropTypes.string, 
         content: PropTypes.string, 
         name: PropTypes.string     
+    })), 
+    folders: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string, 
+        name: PropTypes.string 
     }))
 }
 

@@ -48,7 +48,8 @@ class Notecard extends Component{
 }
 
 Notecard.propTypes = {
-    selectNote: PropTypes.func
+    selectNote: PropTypes.func, 
+    note: PropTypes.object
 }
 
 

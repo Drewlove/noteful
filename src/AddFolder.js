@@ -24,7 +24,6 @@ class AddFolder extends Component{
     }
 
     handleSubmit(){
-        console.log('props', this.props)
         const options = {
             method: 'POST', 
             body: JSON.stringify({name: this.state.name}),
@@ -63,6 +62,10 @@ class AddFolder extends Component{
             </>
         )
     }
+}
+
+AddFolder.propTypes = {
+    addFolder: PropTypes.func, 
 }
 
 export default AddFolder

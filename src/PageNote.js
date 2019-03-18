@@ -41,7 +41,12 @@ PageNote.propTypes = {
         content: PropTypes.string, 
         folderId: PropTypes.string, 
         name: PropTypes.string, 
-    }))
+    })), 
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            noteId: PropTypes.string
+        })
+    })
 }
 
 export default PageNote
