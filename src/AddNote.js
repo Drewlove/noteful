@@ -8,9 +8,10 @@ class AddNote extends Component{
 
         this.state = {
             name: '', 
-            folderId: '', 
+            folder_id: '', 
             content: '', 
-            errorMessage: ''
+            errorMessage: '', 
+            folders: []
         }
     }
 
@@ -19,7 +20,7 @@ class AddNote extends Component{
         if(this.state.name.length === 0){
             const errorMessage = "Must enter a name for the note"
             this.setState({errorMessage})
-        } else if(this.state.folderId === ''){
+        } else if(this.state.folder_id === ''){
             const errorMessage = "Must select a folder"; 
             this.setState({errorMessage})
         } else {
@@ -28,37 +29,70 @@ class AddNote extends Component{
     }
 
     submit(){
-        const {name, folderId, content} = this.state;
+        const url = `http://localhost:9000/api/notes`
         const options = {
             method: 'POST', 
-            body: JSON.stringify({name, folderId, content}), 
+            body: JSON.stringify({
+                name: this.state.name, 
+                folder_id: this.state.folder_id, 
+                content: this.state.content 
+            }),
             headers: {
+                'Authorization': 'Bearer 1234', 
                 'content-type': 'application/json'
             }
-        }; 
+        }
 
-        fetch('http://localhost:9090/notes', options)
+        fetch(url, options)
         .then(res => {
             if(!res.ok){
-                throw new Error('no good man! no good!')
+                throw new Error(res.status)
             }
-            return res.json()
+            return res
         })
-        .then(this.props.addNote)
+        .then(res => res.json())
+        .then(resJSON => this.props.addNote(resJSON))
         .then(this.props.history.push('/'))
     }
 
     componentDidMount(){
-        const defaultFolderId = this.props.folders[0].id; 
-        this.setState({folderId:defaultFolderId})
-    }
+        const options = {
+          method: "GET", 
+          headers: {
+            'Authorization': 'Bearer 1234', 
+            'Content-Type': 'application/json'
+          }
+        }
+        this.updateFetchedState('http://localhost:9000/api/folders', options)
+      }
+    
+      updateFetchedState(url, options){
+        fetch(url, options)
+        .then(res => {
+          if(!res.ok){
+            throw new Error(res.status) 
+          }
+          return res
+        })
+        .then(res => res.json())
+        .then(folders => this.setState({folders}))
+        .then( () => this.setDefaultFolder()) 
+        .catch(error => this.setState({error}))
+      }
+
+      setDefaultFolder(){
+        const folder_id = this.state.folders[0].id
+        this.setState({folder_id})
+      }
+
+
 
     updateName(name){
         this.setState({name})
     }
 
-    updateFolder(folderId){
-        this.setState({folderId})
+    updateFolder(folder_id){
+        this.setState({folder_id})
     }
 
     updateContent(content){
@@ -92,7 +126,7 @@ class AddNote extends Component{
 
 AddNote.propTypes = {
     folders: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired, 
+        id: PropTypes.number.isRequired, 
         name: PropTypes.string.isRequired
     })), 
     addNote: PropTypes.func

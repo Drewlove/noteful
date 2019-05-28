@@ -3,45 +3,58 @@ import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'; 
 
 class Notecard extends Component{
-
-    handleSelectNote = (note) => {
-        this.props.selectNote(note)
+    state = {
+        error: null
     }
 
-    handleDeleteNote = (noteId, callbackDelete) => {
-        fetch(`http://localhost:9090/notes/${noteId}`, {
-            method: 'DELETE', 
+
+    handleDeleteNote(noteId){
+        console.log(`note id ${noteId}`)
+        const url = `http://localhost:9000/api/notes/${noteId}`
+        const options = {
+            method: "DELETE", 
             headers: {
-                'content-type': 'application/json'
-              },
-        })
+                "Authorization": "Bearer 1234", 
+                "Content-Type": "application/json"
+            }
+        }
+        fetch(url, options)
         .then(res => {
             if(!res.ok){
-                return res.json().then(error => {
-                    throw error
-                })
+                throw new Error(res.status)
             }
-            return res.json()
+            return res
         })
-        .then(callbackDelete(noteId))
-        .catch(error => console.log(error))
+        .then( () => {
+            this.props.deleteNote(noteId)
+        })
+        .catch(error => this.setState({error}))
+    }
+
+    renderNotecard(){
+        console.log(this.props.note)
+        return (
+            <section className='notecard'>
+            <Link 
+                to={`/note/${this.props.note.id}`} 
+                className='notecard-title'
+                >
+                <h1>{this.props.note.name}</h1>
+            </Link>
+            <button className='notecard-delete-btn' 
+                onClick={()=>this.handleDeleteNote(this.props.note.id)}
+                >
+                Delete
+            </button>
+            <Link to={`/edit/${this.props.note.id}`}>Edit</Link>
+        </section>
+        )
     }
 
     render(){
         return (
-            <div className='notecard'>
-                <Link 
-                to={`/note/${this.props.note.id}`} 
-                className='notecard-title'
-                onClick={()=> this.handleSelectNote(this.props.note)}
-                >
-                <h1>{this.props.note.name}</h1>
-                </Link>
-                <button className='notecard-delete-btn' 
-                onClick={()=>this.handleDeleteNote(this.props.note.id, this.props.deleteNote)}
-                >
-                Delete
-                </button>
+            <div>
+            {this.props.note ? this.renderNotecard() : null}
             </div>
         )
     }

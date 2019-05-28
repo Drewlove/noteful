@@ -10,7 +10,8 @@ class AddFolder extends Component{
         this.state={
             name: '', 
             hasError: false, 
-            errorMessage: ''
+            errorMessage: '', 
+            error: null, 
         }
     }
 
@@ -25,23 +26,27 @@ class AddFolder extends Component{
     }
 
     handleSubmit(){
+        const url = `http://localhost:9000/api/folders`
         const options = {
             method: 'POST', 
             body: JSON.stringify({name: this.state.name}),
             headers: {
+                'Authorization': 'Bearer 1234', 
                 'content-type': 'application/json'
             }
         }
+        
 
-        fetch('http://localhost:9090/folders', options)
+        fetch(url, options)
         .then(res => {
             if(!res.ok){
-                throw new Error("not ok man! all broke!")
+                throw new Error(res.status)
             }
-            return res.json()
+            return res
         })
-        .then(this.props.addFolder, this.props.history.push('/'))
-        .catch(error => console.log(error))
+        .then(res => res.json())
+        .then(resJSON => this.props.addFolder(resJSON), this.props.history.push('/'))
+        .catch(error => this.setState({error}))
     }
 
     handleUpdate(name){

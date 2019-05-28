@@ -4,28 +4,65 @@ import Notecard from './Notecard';
 import PropTypes from 'prop-types';
 
 class PageNote extends Component{
+    state = {
+        folder: [], 
+        note: {},
+        error: null
+      }
+      componentDidMount(){
+        const url = `http://localhost:9000/api/notes/${this.props.match.params.noteId}`
+            const options = {
+              method: "GET", 
+              headers: {
+                'Authorization': 'Bearer 1234', 
+                'Content-Type': 'application/json'
+              }
+            }
+            fetch(url, options)
+            .then(res => {
+              if(!res.ok){
+                throw new Error(res.status)
+              }
+              return res
+            })
+            .then(res => res.json())
+            .then(note => this.setState({note}))
+            .then(() => this.fetchFolder())
+            .catch(error => this.setState({error}))
+          }
 
+          fetchFolder(){
+              const {folder_id} = this.state.note
+              const url = `http://localhost:9000/api/folders/${folder_id}`
+              const options = {
+                method: "GET", 
+                headers: {
+                  'Authorization': 'Bearer 1234', 
+                  'Content-Type': 'application/json'
+                }
+              }
+              fetch(url, options)
+              .then(res => {
+                  if(!res.ok){
+                      throw new Error(res.status)
+                  }
+                  return res
+              })
+              .then(res => res.json())
+              .then(folder => this.setState({folder}))
+              .catch(error => this.setState({error}))
+          }
+
+    
     render(){
-        console.log('props', this.props)
-        const note = this.props.notes.find(note => {
-            return note.id === this.props.match.params.noteId
-        })
-        const folder = this.props.folders.find(folder => {
-            return folder.id === note.folderId
-        })
-
         return (
             <div  className='main'>
                 <div>
-                    <Link to='/' className='sidebar-btn'>
-                    Go Back
-                    </Link>
-                    <h1>{folder.name}</h1>
+                    <h1>{this.state.folder.name}</h1>
                 </div>
                 <section>
-                <Notecard note={note} deleteNote={this.props.deleteNote}/>
-                <p className='notecard-content'>{note.content}</p>
-                
+                <Notecard note={this.state.note} deleteNote={this.props.deleteNote}/>
+                <p className='notecard-content'>{this.state.note.content}</p>       
                 </section>
             </div>
         )
@@ -34,12 +71,12 @@ class PageNote extends Component{
 
 PageNote.propTypes = {
     folders: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.name, 
-        name: PropTypes.id                
+        id: PropTypes.id, 
+        name: PropTypes.name               
     })), 
     notes: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string, 
-        folderId: PropTypes.string, 
+        folder_id: PropTypes.number, 
         name: PropTypes.string, 
     })), 
     match: PropTypes.shape({

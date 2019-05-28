@@ -5,6 +5,7 @@ import PageFolder from './PageFolder';
 import PageNote from './PageNote';
 import AddFolder from './AddFolder'; 
 import AddNote from './AddNote'; 
+import EditNoteCard from './EditNoteCard'
 
 class App extends Component {
   state = {
@@ -15,12 +16,19 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.updateFetchedState('http://localhost:9090/notes', 'notes')
-    this.updateFetchedState('http://localhost:9090/folders', 'folders')
+    const options = {
+      method: "GET", 
+      headers: {
+        'Authorization': 'Bearer 1234', 
+        'Content-Type': 'application/json'
+      }
+    }
+    this.updateFetchedState('http://localhost:9000/api/folders', 'folders', options)
+    this.updateFetchedState('http://localhost:9000/api/notes', 'notes', options)
   }
 
-  updateFetchedState(url, stateName){
-    fetch(url)
+  updateFetchedState(url, stateName, options){
+    fetch(url, options)
     .then(res => {
       if(!res.ok){
         throw new Error(res.status) 
@@ -42,8 +50,10 @@ class App extends Component {
     this.setState({notes})
   }
 
-  selectNote = (note) => {
-    this.setState({note})
+  editNote = (editedNote) => {
+    const filteredNotes = this.state.notes.filter(note => note.id !== editedNote.id)
+    const notes = [...filteredNotes, editedNote]
+    this.setState({notes})
   }
 
   deleteNote = (noteId) => {
@@ -77,7 +87,7 @@ class App extends Component {
             />
             
             <Route
-              path='/folder/:folderId'
+              path='/folder/:folder_id'
               render={(routeProps) => {
                 return(
                   <PageFolder 
@@ -99,6 +109,20 @@ class App extends Component {
                   notes = {this.state.notes}
                   folders={this.state.folders}
                   deleteNote={this.deleteNote}
+                 {...routeProps}
+                  />
+                )
+              }}
+              />
+              
+              <Route 
+              path = '/edit/:noteId'
+              render={routeProps => {
+                return (
+                  <EditNoteCard
+                  notes={this.state.notes}
+                  folders={this.state.folders}
+                  editNote={this.editNote}
                  {...routeProps}
                   />
                 )

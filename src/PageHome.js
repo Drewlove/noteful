@@ -28,13 +28,13 @@ class PageHome extends Component{
 
 PageHome.propTypes = {
     notes: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string, 
-        folderId: PropTypes.string, 
+        id: PropTypes.number, 
+        folder_id: PropTypes.number, 
         content: PropTypes.string, 
         name: PropTypes.string     
     })), 
     folders: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string, 
+        id: PropTypes.number, 
         name: PropTypes.string 
     }))
 }
