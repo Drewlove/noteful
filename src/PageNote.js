@@ -1,7 +1,7 @@
 import React, {Component} from 'react'; 
-import {Link} from 'react-router-dom'; 
 import Notecard from './Notecard';
 import PropTypes from 'prop-types';
+import config from './config'
 
 class PageNote extends Component{
     state = {
@@ -10,7 +10,7 @@ class PageNote extends Component{
         error: null
       }
       componentDidMount(){
-        const url = `http://localhost:9000/api/notes/${this.props.match.params.noteId}`
+        const url = `${config.API_ENDPOINT}/api/notes/${this.props.match.params.noteId}`
             const options = {
               method: "GET", 
               headers: {
@@ -33,7 +33,7 @@ class PageNote extends Component{
 
           fetchFolder(){
               const {folder_id} = this.state.note
-              const url = `http://localhost:9000/api/folders/${folder_id}`
+              const url = `${config.API_ENDPOINT}/api/folders/${folder_id}`
               const options = {
                 method: "GET", 
                 headers: {

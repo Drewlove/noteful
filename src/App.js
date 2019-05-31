@@ -6,6 +6,7 @@ import PageNote from './PageNote';
 import AddFolder from './AddFolder'; 
 import AddNote from './AddNote'; 
 import EditNoteCard from './EditNoteCard'
+import config from './config'
 
 class App extends Component {
   state = {
@@ -16,15 +17,16 @@ class App extends Component {
   }
 
   componentDidMount(){
+    console.log(config.API_KEY)
     const options = {
       method: "GET", 
       headers: {
-        'Authorization': 'Bearer 1234', 
+        'Authorization': config.API_KEY, 
         'Content-Type': 'application/json'
       }
     }
-    this.updateFetchedState('http://localhost:9000/api/folders', 'folders', options)
-    this.updateFetchedState('http://localhost:9000/api/notes', 'notes', options)
+    this.updateFetchedState(`${config.API_ENDPOINT}/api/folders`, 'folders', options)
+    this.updateFetchedState(`${config.API_ENDPOINT}/api/notes`, 'notes', options)
   }
 
   updateFetchedState(url, stateName, options){

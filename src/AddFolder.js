@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import FormError from './FormError';
 import ErrorBoundary from './ErrorBoundary'; 
 import PropTypes from 'prop-types';
+import config from './config'
 
 class AddFolder extends Component{
     constructor(props){
@@ -26,7 +27,7 @@ class AddFolder extends Component{
     }
 
     handleSubmit(){
-        const url = `http://localhost:9000/api/folders`
+        const url = `${config.API_ENDPOINT}/api/folders`
         const options = {
             method: 'POST', 
             body: JSON.stringify({name: this.state.name}),

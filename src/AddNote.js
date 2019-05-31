@@ -1,6 +1,7 @@
 import React, {Component} from 'react'; 
 import FormError from './FormError'; 
 import PropTypes from 'prop-types';
+import config from './config'
 
 class AddNote extends Component{
     constructor(props){
@@ -29,7 +30,7 @@ class AddNote extends Component{
     }
 
     submit(){
-        const url = `http://localhost:9000/api/notes`
+        const url = `${config.API_ENDPOINT}/api/notes`
         const options = {
             method: 'POST', 
             body: JSON.stringify({
@@ -63,7 +64,7 @@ class AddNote extends Component{
             'Content-Type': 'application/json'
           }
         }
-        this.updateFetchedState('http://localhost:9000/api/folders', options)
+        this.updateFetchedState(`${config.API_ENDPOINT}/api/folders`, options)
       }
     
       updateFetchedState(url, options){

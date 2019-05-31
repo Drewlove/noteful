@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import config from './config'
 
 class EditNotecard extends Component{
     state = {
@@ -9,7 +10,7 @@ class EditNotecard extends Component{
     }
     
     componentDidMount(){
-        const url = `http://localhost:9000/api/notes/${this.props.match.params.noteId}`
+        const url = `${config.API_ENDPOINT}/api/notes/${this.props.match.params.noteId}`
         const options = {
             method: "GET", 
             headers: {
@@ -57,7 +58,7 @@ class EditNotecard extends Component{
         }
 
         submit(){
-            const url = `http://localhost:9000/api/notes/${this.state.id}`
+            const url = `${config.API_ENDPOINT}/api/notes/${this.state.id}`
             const options = {
                 method: 'PATCH', 
                 body: JSON.stringify({

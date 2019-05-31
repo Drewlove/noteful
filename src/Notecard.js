@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom' 
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types' 
+import config from './config'
 
 class Notecard extends Component{
     state = {
@@ -10,7 +11,7 @@ class Notecard extends Component{
 
     handleDeleteNote(noteId){
         console.log(`note id ${noteId}`)
-        const url = `http://localhost:9000/api/notes/${noteId}`
+        const url = `${config.API_ENDPOINT}/api/notes/${noteId}`
         const options = {
             method: "DELETE", 
             headers: {
